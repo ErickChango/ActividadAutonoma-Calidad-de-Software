@@ -1,0 +1,74 @@
+@model PokemonListViewModel
+@{
+    ViewData["Title"] = "Lista de Pokémon";
+}
+
+<div class="pokemon-list-container">
+    <h1 class="page-title">Pokédex - Lista de Pokémon</h1>
+    
+    <div class="pagination-info">
+        <p>Mostrando página <strong>@Model.CurrentPage</strong> de <strong>@Model.TotalPages</strong> (Total: @Model.TotalCount pokémons)</p>
+    </div>
+
+    @if (!Model.Pokemons.Any())
+    {
+        <div class="alert alert-info">
+            <p>No se encontraron pokémons. Intenta recargar la página.</p>
+        </div>
+    }
+    else
+    {
+        <div class="pokemon-grid">
+            @foreach (var pokemon in Model.Pokemons)
+            {
+                <div class="pokemon-card">
+                    <a asp-action="Details" asp-route-id="@pokemon.Id" class="pokemon-link">
+                        <div class="pokemon-number">#@pokemon.Id.ToString("D3")</div>
+                        <div class="pokemon-image-container">
+                            <img src="@pokemon.ImageUrl" 
+                                 alt="@pokemon.Name" 
+                                 class="pokemon-image" 
+                                 loading="lazy"
+                                 onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/@(pokemon.Id).png';" />
+                        </div>
+                        <div class="pokemon-name">@pokemon.Name.ToUpper()</div>
+                    </a>
+                </div>
+            }
+        </div>
+
+        <div class="pagination-controls">
+            @if (Model.HasPrevious)
+            {
+                <a asp-action="Index" asp-route-page="1" asp-route-limit="@Model.Limit" class="btn btn-pagination">« Primera</a>
+                <a asp-action="Index" asp-route-page="@(Model.CurrentPage - 1)" asp-route-limit="@Model.Limit" class="btn btn-pagination">‹ Anterior</a>
+            }
+            else
+            {
+                <span class="btn btn-pagination btn-disabled">« Primera</span>
+                <span class="btn btn-pagination btn-disabled">‹ Anterior</span>
+            }
+
+            <span class="pagination-current">Página @Model.CurrentPage de @Model.TotalPages</span>
+
+            @if (Model.HasNext)
+            {
+                <a asp-action="Index" asp-route-page="@(Model.CurrentPage + 1)" asp-route-limit="@Model.Limit" class="btn btn-pagination">Siguiente ›</a>
+                <a asp-action="Index" asp-route-page="@Model.TotalPages" asp-route-limit="@Model.Limit" class="btn btn-pagination">Última »</a>
+            }
+            else
+            {
+                <span class="btn btn-pagination btn-disabled">Siguiente ›</span>
+                <span class="btn btn-pagination btn-disabled">Última »</span>
+            }
+        </div>
+
+        <div class="items-per-page">
+            <label>Pokémons por página:</label>
+            <a asp-action="Index" asp-route-page="1" asp-route-limit="12" class="btn-limit @(Model.Limit == 12 ? "active" : "")">12</a>
+            <a asp-action="Index" asp-route-page="1" asp-route-limit="20" class="btn-limit @(Model.Limit == 20 ? "active" : "")">20</a>
+            <a asp-action="Index" asp-route-page="1" asp-route-limit="30" class="btn-limit @(Model.Limit == 30 ? "active" : "")">30</a>
+            <a asp-action="Index" asp-route-page="1" asp-route-limit="50" class="btn-limit @(Model.Limit == 50 ? "active" : "")">50</a>
+        </div>
+    }
+</div>

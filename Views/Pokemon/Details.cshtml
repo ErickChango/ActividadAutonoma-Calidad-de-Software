@@ -1,0 +1,122 @@
+@model Pokemon
+@{
+    ViewData["Title"] = $"Detalles - {Model.Name}";
+}
+
+<div class="pokemon-details-container">
+    <div class="back-link">
+        <a asp-action="Index" class="btn btn-back">← Volver a la lista</a>
+    </div>
+
+    <div class="pokemon-details-card">
+        <div class="pokemon-header">
+            <h1 class="pokemon-details-title">@Model.Name.ToUpper()</h1>
+            <span class="pokemon-id">#@Model.Id.ToString("D3")</span>
+        </div>
+
+        <div class="pokemon-content">
+            <div class="pokemon-main-image">
+                <img src="@Model.ImageUrl" 
+                     alt="@Model.Name"
+                     onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/@(Model.Id).png';" />
+            </div>
+
+            <div class="pokemon-info">
+                <div class="info-section">
+                    <h3>Información Básica</h3>
+                    <div class="info-row">
+                        <span class="info-label">Altura:</span>
+                        <span class="info-value">@(Model.Height / 10.0)m</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Peso:</span>
+                        <span class="info-value">@(Model.Weight / 10.0)kg</span>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h3>Tipos</h3>
+                    <div class="types-container">
+                        @foreach (var type in Model.Types)
+                        {
+                            <span class="type-badge type-@type.Name.ToLower()">@type.Name.ToUpper()</span>
+                        }
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h3>Habilidades</h3>
+                    <div class="abilities-container">
+                        @foreach (var ability in Model.Abilities)
+                        {
+                            <span class="ability-badge">@ability.Name</span>
+                        }
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h3>Estadísticas Base</h3>
+                    <div class="stats-container">
+                        <div class="stat-row">
+                            <span class="stat-label">HP:</span>
+                            <div class="stat-bar-container">
+                                <div class="stat-bar" style="width: @(Model.Stats.Hp * 100 / 255)%"></div>
+                            </div>
+                            <span class="stat-value">@Model.Stats.Hp</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Ataque:</span>
+                            <div class="stat-bar-container">
+                                <div class="stat-bar" style="width: @(Model.Stats.Attack * 100 / 255)%"></div>
+                            </div>
+                            <span class="stat-value">@Model.Stats.Attack</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Defensa:</span>
+                            <div class="stat-bar-container">
+                                <div class="stat-bar" style="width: @(Model.Stats.Defense * 100 / 255)%"></div>
+                            </div>
+                            <span class="stat-value">@Model.Stats.Defense</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Ataque Esp.:</span>
+                            <div class="stat-bar-container">
+                                <div class="stat-bar" style="width: @(Model.Stats.SpecialAttack * 100 / 255)%"></div>
+                            </div>
+                            <span class="stat-value">@Model.Stats.SpecialAttack</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Defensa Esp.:</span>
+                            <div class="stat-bar-container">
+                                <div class="stat-bar" style="width: @(Model.Stats.SpecialDefense * 100 / 255)%"></div>
+                            </div>
+                            <span class="stat-value">@Model.Stats.SpecialDefense</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Velocidad:</span>
+                            <div class="stat-bar-container">
+                                <div class="stat-bar" style="width: @(Model.Stats.Speed * 100 / 255)%"></div>
+                            </div>
+                            <span class="stat-value">@Model.Stats.Speed</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="navigation-buttons">
+            @if (Model.Id > 1)
+            {
+                <a asp-action="Details" asp-route-id="@(Model.Id - 1)" class="btn btn-nav">← Pokémon Anterior</a>
+            }
+            else
+            {
+                <span class="btn btn-nav btn-disabled">← Pokémon Anterior</span>
+            }
+
+            <a asp-action="Index" class="btn btn-nav-center">Ver Todos</a>
+
+            <a asp-action="Details" asp-route-id="@(Model.Id + 1)" class="btn btn-nav">Pokémon Siguiente →</a>
+        </div>
+    </div>
+</div>

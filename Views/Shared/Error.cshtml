@@ -1,0 +1,18 @@
+@model ErrorViewModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+<div class="error-container">
+    <h1 class="error-title">¡Oops! Algo salió mal</h1>
+    <p class="error-message">Ha ocurrido un error inesperado. Por favor, intenta nuevamente.</p>
+    
+    @if (Model.ShowRequestId)
+    {
+        <p>
+            <strong>Request ID:</strong> <code>@Model.RequestId</code>
+        </p>
+    }
+    
+    <a asp-controller="Pokemon" asp-action="Index" class="btn btn-back">Volver al inicio</a>
+</div>
